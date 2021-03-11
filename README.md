@@ -4,10 +4,9 @@
 This app allows users to create their own quiz.
 
 ## Usage
-- The app is build in React Native and Expo
-- More complex layout with flexbox
-- Built and used custom components
-- Handled complex state in React Native
+- React Native Navigation & building multi-screen apps
+- Theming
+- Managing and interacting with multiple data sources
 
 ##Demo
 
