@@ -1,44 +1,94 @@
-// This is where we define our navigators//
-///////////////////////////////////////////
-
 import React from "react";
+import { TouchableOpacity, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import Quiz from "./screens/Quiz";
+import { FontAwesome5 } from "@expo/vector-icons";
 import QuizIndex from "./screens/QuizIndex";
+import Quiz from "./screens/Quiz";
+import NewQuiz from "./screens/NewQuiz";
 
-// create stackNavigator in React 5
-// Setup the main navigstion by creating a stack navigator
-// it stacks screens on top of each other
-const MyStack = createStackNavigator();
+const RootStack = createStackNavigator();
+const MainStack = createStackNavigator();
 
-// this allows us to use the Navigaiton Container in React 5
-// const MainStack = createStackNavigator({}); is earlier versions
-export default function MainStack() {
+export function MainStackScreens() {
+  return (
+    <MainStack.Navigator initialRouteName="QuizIndex">
+      <MainStack.Screen
+        name="QuizIndex"
+        component={QuizIndex}
+        options={({ navigation }) => ({
+          title: "Quizzes",
+          headerRight: () => (
+            <>
+              {/* navigate to the new quiz when clicking the "+" */}
+              <TouchableOpacity
+                style={{ marginRight: 18 }}
+                onPress={() => navigation.navigate("NewQuiz")}
+              >
+                <FontAwesome5 name="plus" size={24} color="black" />
+              </TouchableOpacity>
+            </>
+          ),
+        })}
+      />
+      <MainStack.Screen
+        name="Quiz"
+        component={Quiz}
+        options={({ route }) => ({
+          title: route.params.title ?? "Unnamed Quiz",
+          headerTintColor: "white",
+          headerStyle: {
+            backgroundColor: route.params.color,
+            shadowColor: "transparent",
+          },
+        })}
+      />
+    </MainStack.Navigator>
+  );
+}
+
+export default function RootStackScreens() {
   return (
     <NavigationContainer>
-      <MyStack.Navigator initialRouteName="QuizIndex">
-        {/*Quiz Index screen navigation*/}
-        <MyStack.Screen
-          name="QuizIndex"
-          component={QuizIndex}
-          options={{ title: "Quizzes" }} // adds the header title on top of the screen
+      <RootStack.Navigator mode="modal">
+        <RootStack.Screen
+          name="Main"
+          component={MainStackScreens}
+          options={{ headerShown: false }} // instead of showing Main it passes through whatever component goes from the main
         />
-        {/*Quiz screen navigation*/}
-        <MyStack.Screen
-          name="Quiz"
-          component={Quiz}
-          options={({ route }) => ({
-            // navigation options
-            title: route.params.title ?? "Unnamed Quiz",
-            headerTintColor: "#fff", // set the color of the title and the back button to white
-            headerStyle: {
-              backgroundColor: route.params.color, // change the color of the header to match the body of the screen
-              shadowColor: "transparent",
-            },
+        <RootStack.Screen
+          name="NewQuiz"
+          component={NewQuiz}
+          options={({ navigation }) => ({
+            title: "Create New Quiz",
+            headerLeft: () => (
+              <>
+                {/* navigate to the new quiz when clicking the "+" */}
+                <TouchableOpacity
+                  style={{ marginLeft: 18 }}
+                  onPress={() => navigation.pop()}
+                >
+                  <Text style={{ fontSize: 16 }}>Cancel</Text>
+                </TouchableOpacity>
+              </>
+            ),
+            // headerRight: () => (
+            //   <>
+            //     {/* navigate to the new quiz when clicking the "+" */}
+            //     <TouchableOpacity
+            //       style={{ marginLeft: 18 }}
+            //     >
+            //       <Text
+            //         style={{ marginRight: 18, fontSize: 16, fontWeight: "600" }}
+            //       >
+            //         Save
+            //       </Text>
+            //     </TouchableOpacity>
+            //   </>
+            // ),
           })}
         />
-      </MyStack.Navigator>
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 }

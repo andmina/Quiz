@@ -3,8 +3,7 @@ import { View, StyleSheet, Dimensions, Image } from "react-native";
 
 const screen = Dimensions.get("window");
 
-const styles = StyleSheet.create({
-  //position the alert in the middle
+const Styles = StyleSheet.create({
   container: {
     position: "absolute",
     top: 0,
@@ -19,8 +18,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ff4136",
     width: screen.width / 2,
     height: screen.width / 2,
-    borderRadius: screen.width / 2, // create a circle
-    // center the x icon in the middle of the circle
+    borderRadius: screen.width / 4,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -35,23 +33,19 @@ const styles = StyleSheet.create({
 export const Alert = ({ correct, visible }) => {
   if (!visible) return null;
 
-  // if the prop correct is passed we're gonna use a different image
   const icon = correct
     ? require("../assets/check.png")
     : require("../assets/close.png");
 
-  const circleStyles = [styles.circle];
-
+  const circleStyles = [Styles.circle];
   if (correct) {
-    circleStyles.push(styles.circleCorrect);
+    circleStyles.push(Styles.circleCorrect);
   }
 
   return (
-    <View style={styles.container}>
+    <View style={Styles.container}>
       <View style={circleStyles}>
-        {/* add x ixon,
-            resizeMode="contain" will specify that the image is not to go outside of the are/>*/}
-        <Image source={icon} style={styles.icon} resizeMode="contain" />
+        <Image source={icon} style={Styles.icon} resizeMode="contain" />
       </View>
     </View>
   );
